@@ -17,11 +17,22 @@ def remove_stopwords(word_list):
     "we're",
     'um',
     "let's",
+    "him",
+    "get",
+    "go",
+    "let",
+    "can",
+    'come',
+    'here',
     ''
 ]
     stop_words = list(set(stopwords.words('english'))) + my_stop_words
     filtered_words = [word for word in word_list if word not in stop_words]
     return filtered_words
+
+def persons_of_interest(chars_list):
+    chars_dict = { i:[i.lower()] for i in chars_list}
+    return chars_dict
 
 def sum_names_in_wordlist(
         persons_of_interest, 
