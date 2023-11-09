@@ -1,6 +1,9 @@
 from collections import Counter
 from nltk.corpus import stopwords
 
+import pandas as pd
+import plotly.express as px
+
 def remove_stopwords(word_list):
     '''
     Removes the NLTK stopwords and my own list of stopwords from the input list
@@ -52,7 +55,52 @@ def sum_names_in_wordlist(
         total_count = sum(word_counts[word] for word in word_list if word in word_counts)
         summed_counts[key] = total_count
     return summed_counts
+
+def name_counts_by_season(
+        persons_of_interest,
+        dict_of_season_words
+):
+    '''
+    Persons_of_interest
+    Give it the results of a ForeverDreamingForum(url).harvest_TV_season_corpii() method call
+    '''
+    return {
+    season_num : sum_names_in_wordlist(persons_of_interest, dict_of_season_words[season_num]) for season_num in dict_of_season_words.keys()
+    }
+
+
+def name_count_line_graph(
+        persons_of_interest,
+        dict_of_season_words,
+    ):
+    df = pd.DataFrame(
+        name_counts_by_season(
+            persons_of_interest,
+            dict_of_season_words
+        )
+    ).T
+    fig = px.line(df)
+    #fig.show()
+    fig.update_layout(
+        yaxis_title = 'Name Drop Frequency',
+        xaxis_title = 'Seasons',
+        legend_title = '<b>Characters</b>',
+        title_text = 'Times a Character is Mentioned',
+        template = 'plotly_dark',
+        title_font_color = 'red',
+        legend_title_font_color = 'red',
+    )
+    return fig
+
+
+
+
+
+
+
+
 #################
+#deprecated
 
 def select_season_words(
         episodes_dict,
